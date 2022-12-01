@@ -1,0 +1,71 @@
+---
+title: "Shiny Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(p8105.datasets)
+
+
+data(nyc_airbnb)
+nyc_airbnb =
+  nyc_airbnb %>% 
+  mutate(stars = review_scores_location / 2) %>% 
+  rename(borough = neighbourhood_group) %>% 
+  select(borough, neighbourhood, stars, price, room_type, lat, long) %>% 
+  drop_na(stars)
+``` 
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+boroughs = nyc_airbnb %>% 
+  distinct(borough) %>% 
+  pull()
+
+selectInput(
+  inputId = 'borough_choice',
+  label = h3('Borough Choice'), ## h3 is header size is 3
+  choices = boroughs
+)
+
+
+
+
+
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+renderPrint({
+input[["borough_choice"]]
+  })
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
